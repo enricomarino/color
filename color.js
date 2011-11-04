@@ -155,8 +155,9 @@
         yellow: '#ffff00',
         yellowgreen: '#9acd32'
     },
-    rgb_regex: /([\d]{1,3})/g,
-    hex_regex: /^[#]{0,1}([\w]{1,2})([\w]{1,2})([\w]{1,2})$/;
+    rgb_regex = /([\d]{1,3})/g,
+    hex_regex = /^[#]{0,1}([\w]{1,2})([\w]{1,2})([\w]{1,2})$/,
+    parseInt = parseInt;
 
     function rgb_to_hex (str) {
 
