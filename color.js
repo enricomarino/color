@@ -164,9 +164,9 @@
         var rgb = str.match(rgb_regex);
 
         return '#'
-            + (rgb[0] - 0).toString(16).substr(-2, 2)
-            + (rgb[1] - 0).toString(16).substr(-2, 2)
-            + (rgb[2] - 0).toString(16).substr(-2, 2);
+            + ('0' + (rgb[0] - 0).toString(16)).substr(-2, 2)
+            + ('0' + (rgb[1] - 0).toString(16)).substr(-2, 2)
+            + ('0' + (rgb[2] - 0).toString(16)).substr(-2, 2);
             
     }
 
