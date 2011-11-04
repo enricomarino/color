@@ -179,7 +179,7 @@
         return 'rgb(' 
             + parseInt(a.length == 1 ? a + a : a, 16) + ' '
             + parseInt(b.length == 1 ? b + b : b, 16) + ' '
-            + parseInt(c.length == 1 ? c + c : c, 16);
+            + parseInt(c.length == 1 ? c + c : c, 16) + ')';
     }
 
     return {
