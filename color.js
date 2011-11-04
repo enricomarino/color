@@ -154,10 +154,38 @@
         whitesmoke: '#f5f5f5',
         yellow: '#ffff00',
         yellowgreen: '#9acd32'
-    };
+    },
+    rgb_regex: /([\d]{1,3})/g,
+    hex_regex: /^[#]{0,1}([\w]{1,2})([\w]{1,2})([\w]{1,2})$/;
+
+    function rgb_to_hex (str) {
+
+        var rgb = str.match(rgb_regex);
+
+        return '#'
+            + (rgb[0] - 0).toString(16).substr(-2, 2)
+            + (rgb[1] - 0).toString(16).substr(-2, 2)
+            + (rgb[2] - 0).toString(16).substr(-2, 2);
+            
+    }
+
+    function hex_to_rgb (str) {
+        
+        var hex = str.match(hex_regex).slice(1),
+            a = hex[0],
+            b = hex[1],
+            c = hex[2];
+        
+        return 'rgb(' 
+            + parseInt(a.length == 1 ? a + a : a, 16) + ' '
+            + parseInt(b.length == 1 ? b + b : b, 16) + ' '
+            + parseInt(c.length == 1 ? c + c : c, 16);
+    }
 
     return {
-        colors: colors
+        colors: colors,
+        rgb_to_hex: rgb_to_hex,
+        hex_to_rgb: hex_to_rgb
     };
 
 }(this));
