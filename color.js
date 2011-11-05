@@ -157,12 +157,12 @@
     },
     rgb_regex = /([\d]{1,3})/g,
     hex_regex = /^[#]{0,1}([\w]{1,2})([\w]{1,2})([\w]{1,2})$/,
-    parseInt = parseInt;
+    parse_int = parseInt;
 
-    function rgb_to_hex (str,as_array) {
+    function rgb_to_hex (str, as_array) {
 
         var rgb = str.match(rgb_regex),
-            hex = ['','',''];
+            hex = [];
 
         hex[0] = ('0' + (rgb[0] - 0).toString(16)).substr(-2, 2);
         hex[1] = ('0' + (rgb[1] - 0).toString(16)).substr(-2, 2);
@@ -172,17 +172,17 @@
             
     }
 
-    function hex_to_rgb (str,as_array) {
+    function hex_to_rgb (str, as_array) {
         
         var hex = str.match(hex_regex).slice(1),
             a = hex[0],
             b = hex[1],
             c = hex[2],
-            rgb = ['','',''];
+            rgb = [];
         
-        rgb[0] = parseInt(a.length == 1 ? a + a : a, 16);
-        rgb[1] = parseInt(b.length == 1 ? b + b : b, 16);
-        rgb[2] = parseInt(c.length == 1 ? c + c : c, 16);
+        rgb[0] = parse_int(a.length == 1 ? a + a : a, 16);
+        rgb[1] = parse_int(b.length == 1 ? b + b : b, 16);
+        rgb[2] = parse_int(c.length == 1 ? c + c : c, 16);
 
         return as_array ? rgb : 'rgb(' + rgb + ')';
     }
