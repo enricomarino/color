@@ -159,28 +159,32 @@
     hex_regex = /^[#]{0,1}([\w]{1,2})([\w]{1,2})([\w]{1,2})$/,
     parseInt = parseInt;
 
-    function rgb_to_hex (str) {
+    function rgb_to_hex (str,as_array) {
 
-        var rgb = str.match(rgb_regex);
+        var rgb = str.match(rgb_regex),
+            hex = ['','',''];
 
-        return '#'
-            + ('0' + (rgb[0] - 0).toString(16)).substr(-2, 2)
-            + ('0' + (rgb[1] - 0).toString(16)).substr(-2, 2)
-            + ('0' + (rgb[2] - 0).toString(16)).substr(-2, 2);
+        hex[0] = ('0' + (rgb[0] - 0).toString(16)).substr(-2, 2);
+        hex[1] = ('0' + (rgb[1] - 0).toString(16)).substr(-2, 2);
+        hex[2] = ('0' + (rgb[2] - 0).toString(16)).substr(-2, 2);
+
+        return as_array ? hex : '#' + hex.join('');
             
     }
 
-    function hex_to_rgb (str) {
+    function hex_to_rgb (str,as_array) {
         
         var hex = str.match(hex_regex).slice(1),
             a = hex[0],
             b = hex[1],
-            c = hex[2];
+            c = hex[2],
+            rgb = ['','',''];
         
-        return 'rgb(' 
-            + parseInt(a.length == 1 ? a + a : a, 16) + ' '
-            + parseInt(b.length == 1 ? b + b : b, 16) + ' '
-            + parseInt(c.length == 1 ? c + c : c, 16) + ')';
+        rgb[0] = parseInt(a.length == 1 ? a + a : a, 16);
+        rgb[1] = parseInt(b.length == 1 ? b + b : b, 16);
+        rgb[2] = parseInt(c.length == 1 ? c + c : c, 16);
+
+        return as_array ? rgb : 'rgb(' + rgb + ')';
     }
 
     return {
