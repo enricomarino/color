@@ -157,7 +157,13 @@
     },
     rgb_regex = /([\d]{1,3})/g,
     hex_regex = /^[#]{0,1}([\w]{1,2})([\w]{1,2})([\w]{1,2})$/,
-    parse_int = parseInt;
+    hsb_regex = rgb_regex,
+    parse_int = parseInt,
+    math = Math,
+    math_floor = math.floor,
+    math_min = math.min,
+    math_max = math.max,
+    math_round = math.round;
 
     function rgb_to_hex (str, as_array) {
 
@@ -169,7 +175,40 @@
         hex[2] = ('0' + (rgb[2] - 0).toString(16)).substr(-2, 2);
 
         return as_array ? hex : '#' + hex.join('');
-            
+    }
+
+    function rgb_to_hsb (str, as_array) {
+        
+        var rgb = str.match(rgb_regex)
+            r = rgb[0],
+            g = rgb[1],
+            b = rgb[2],
+            hex = [],
+            max = math_max(r, g, b),
+            min = math_min(r, g, b),
+            delta = max - min,
+            h = 0,
+            s = (max !== 0) ? delta / max : 0,
+            b = max / 255,
+            r_r, 
+            g_r,
+            b_r;
+
+        if (s) {
+            r_r = (max - r) / delta;
+            g_r = (max - g) / delta;
+            b_r = (max - b) / delta;
+            h = (max === r) ? 
+                    b_r - g_r : (max === g) ? 
+                        2 + r_r - b_r : 4 + g_r - r_r;
+            if ((f /= 6) < 0) {
+                h += 1;
+            }
+        }
+
+        hsb = [math_round(h * 360), math_round(s * 100), math_round(b * 100)];
+
+        return (as_array) ? hsb : 'hsb(' + hsb + ')';
     }
 
     function hex_to_rgb (str, as_array) {
@@ -187,10 +226,41 @@
         return as_array ? rgb : 'rgb(' + rgb + ')';
     }
 
+    function hsb_to_rgb (str, as_array) {
+    
+        var hsb = str.match(hsb_regex).slice(1),
+            h = (hsb[0] % 360 < 0) ? (hsb[0] % 360 + 360) : hsb[0],
+            s = math_min(100, math_max(0, math_round(hsb[1]))),
+            b = math_min(100, math_max(0, math_round(hsb[1]))),
+            b_r = math_round(b / 100 * 255);
+
+        if (s == 0) {
+            return as_array ? [b_r, b_r, b_r] : 'rgb(' + [b_r, b_r, b_r] + ')';
+        }
+
+        var f = h % 60,
+            p = math_round((b * (100 - s)) / 10000 * 255),
+            q = math_round((b * (6000 - s * f)) / 600000 * 255),
+            t = math_round((b * (6000 - s * (60 - f))) / 600000 * 255),
+            v = math_floor(h / 60),
+            rgb;
+        
+        if (v === 0) rgb = [b_r, t, p]; 
+        else if (v === 1) rgb = [q, b_r, p];
+        else if (v === 2) rgb = [p, b_r, t];
+        else if (v === 3) rgb = [p, q, b_r];
+        else if (v === 4) rgb = [t, p, b_r];
+        else rgb = [b_r, p, q];
+
+        return as_array ? rgb : 'rgb(' + rgb + ')';
+    }
+
     return {
         colors: colors,
         rgb_to_hex: rgb_to_hex,
-        hex_to_rgb: hex_to_rgb
+        rgb_to_hsb: rgb_to_hsb,
+        hex_to_rgb: hex_to_rgb,
+        hsb_to_rgb: hsb_to_rgb
     };
 
 }(this));
